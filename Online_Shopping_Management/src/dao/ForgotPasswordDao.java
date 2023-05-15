@@ -1,0 +1,138 @@
+package dao;
+
+import java.lang.System.Logger.Level;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
+
+
+public class ForgotPasswordDao {
+	 Connection con = Myconnection.getConnection();
+     PreparedStatement ps;
+     Statement st;
+     ResultSet rs;
+     
+ 
+     
+     public boolean isEmailExits(String email) {
+   	  try {
+   		  
+   	       ps = con.prepareStatement("select * from user where uemail = ?");
+   	       ps.setString(1, email);
+   	       rs = ps.executeQuery();
+   	       
+   	       if(rs.next()) {
+   	    	   ForgotPassword.jTextField2.setText(rs.getString(6));
+   		       return true;
+   	       }else {
+   	    	JOptionPane.showMessageDialog(null, "Email Address Doesn't Exist");
+   	       }
+   	  
+         } catch (SQLException ex) {
+        	 
+   	      Logger.getLogger(ForgotPasswordDao.class.getName()).log(Level.SEVERE, null, ex);
+         }
+   	  return false; 
+     }
+     
+     
+ 
+     
+     public boolean getAns(String email, String newAns) {
+      	  try {
+      		  
+      	       ps = con.prepareStatement("select * from user where uemail = ?");
+      	       ps.setString(1, email);
+      	       rs = ps.executeQuery();
+      	       
+      	       if(rs.next()) {
+      	    	   String oldAns = rs.getString(7);
+      	    	   
+      	    	   if(newAns.equals(oldAns)) {
+      	    		   return true;      	    		  
+      	    	   }else {
+      	    		   JOptionPane.showMessageDialog(null, "Security Answer Didn't Match");  
+      	    	   }
+      	    	   
+      	       }
+      	  
+            } catch (SQLException ex) {
+            	
+      	      Logger.getLogger(ForgotPasswordDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+      	  return false; 
+      }
+ 
+     
+     
+     
+     
+     public void setPassword(String email, String pass) {
+    	 String sql = "update user set upassword = ? where uemail = ?";
+     	  try { 
+     		  
+     	       ps = con.prepareStatement(sql);
+     	       ps.setString(1, pass);
+     	       ps.setString(2, email);
+     	       
+     	       if(ps.executeUpdate() > 0) {
+     	    	   
+     	    	  JOptionPane.showMessageDialog(null, "Password Successfully Updated");
+     	       }
+     	  
+           } catch (SQLException ex) {
+        	   
+     	      Logger.getLogger(ForgotPasswordDao.class.getName()).log(Level.SEVERE, null, ex);
+           }
+     	   
+     }
+}      
+     
+     
+     
+     
+     
+     
+         
+     
+        
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+     
+
